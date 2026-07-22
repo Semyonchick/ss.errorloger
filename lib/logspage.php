@@ -24,7 +24,7 @@ final class LogsPage
     $public = (bool)($view['public'] ?? false);
     $share = $view['share'] ?? [];
     $createdUrl = (string)($view['createdUrl'] ?? '');
+    $downloadUrl = (string)($view['downloadUrl'] ?? '');
     require dirname(__DIR__) . '/views/logs.php';
   }
 }
-

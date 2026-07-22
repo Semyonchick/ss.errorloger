@@ -7,8 +7,10 @@ $MESS['SS_ERRORLOGER_NOT_CONFIGURED'] = 'не настроен';
 $MESS['SS_ERRORLOGER_GROUPING'] = 'Группировка: тип + сообщение + файл + строка.';
 $MESS['SS_ERRORLOGER_SEARCH_PLACEHOLDER'] = 'Ошибка, файл, хост…';
 $MESS['SS_ERRORLOGER_SEARCH'] = 'Найти';
+$MESS['SS_ERRORLOGER_DOWNLOAD_SOURCE'] = 'Скачать исходный файл';
 $MESS['SS_ERRORLOGER_SHARE_HEADING'] = 'Временный доступ без авторизации';
 $MESS['SS_ERRORLOGER_SHARE_CREATED'] = 'Ссылка создана на 72 часа. После обновления страницы секретная часть больше не показывается.';
+$MESS['SS_ERRORLOGER_SHARE_COPY'] = 'Нажмите, чтобы скопировать ссылку';
 $MESS['SS_ERRORLOGER_SHARE_ACTIVE_UNTIL'] = 'Ссылка активна до';
 $MESS['SS_ERRORLOGER_SHARE_ACTIVE_ACTION'] = 'Можно отозвать её или выпустить новую.';
 $MESS['SS_ERRORLOGER_SHARE_DESCRIPTION'] = 'Ссылка открывает только эту страницу журнала, действует 72 часа и закрыта от индексации.';
@@ -31,4 +33,3 @@ $MESS['SS_ERRORLOGER_HOSTS'] = 'Хосты';
 $MESS['SS_ERRORLOGER_REPEATS'] = 'повторений';
 $MESS['SS_ERRORLOGER_TRACE'] = 'Стек вызовов и детали';
 $MESS['SS_ERRORLOGER_OCCURRENCES'] = 'Последние срабатывания';
-

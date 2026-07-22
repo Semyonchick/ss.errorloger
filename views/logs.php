@@ -21,6 +21,7 @@ endif;
   .ssel__search { display: flex; gap: 8px; align-items: flex-start; }
   .ssel__search input { min-width: 300px; padding: 9px 11px; border: 1px solid #c8d0d5; border-radius: 4px; }
   .ssel__button { padding: 9px 14px; border: 0; border-radius: 4px; background: #2f7dd1; color: #fff; cursor: pointer; }
+  .ssel__button--link { display: inline-block; margin-top: 10px; text-decoration: none; }
   .ssel__button--muted { background: #6d7880; }
   .ssel__stats { display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr)); gap: 12px; margin: 0 0 18px; }
   .ssel__stat { padding: 15px 17px; border: 1px solid #dce3e7; border-radius: 8px; background: #fff; }
@@ -29,7 +30,8 @@ endif;
   .ssel__share, .ssel__setup, .ssel__empty { margin: 0 0 18px; padding: 18px; border-radius: 8px; background: #fff; border: 1px solid #dce3e7; }
   .ssel__share { border-left: 4px solid #2f7dd1; }
   .ssel__share-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .ssel__share-url { flex: 1 1 520px; padding: 9px 11px; border: 1px solid #9ac3ec; border-radius: 4px; }
+  .ssel__share-row + .ssel__share-row { margin-top: 12px; }
+  .ssel__share-url { flex: 1 1 520px; padding: 9px 11px; border: 1px solid #9ac3ec; border-radius: 4px; cursor: copy; }
   .ssel__setup { border-left: 4px solid #e29b28; }
   .ssel__setup pre { overflow: auto; padding: 14px; background: #18232b; color: #eaf2f5; border-radius: 6px; }
   .ssel__list { display: grid; gap: 12px; }
@@ -60,6 +62,9 @@ endif;
       <h2 style="margin:0 0 5px"><?= $escape(Loc::getMessage('SS_ERRORLOGER_HEADING')) ?></h2>
       <div class="ssel__source"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SOURCE')) ?>: <?= $source['path'] !== '' ? $escape($source['path']) : $escape(Loc::getMessage('SS_ERRORLOGER_NOT_CONFIGURED')) ?></div>
       <div class="ssel__source"><?= $escape(Loc::getMessage('SS_ERRORLOGER_GROUPING')) ?></div>
+      <?php if (!$public && $source['readable'] && $downloadUrl !== ''): ?>
+        <a class="ssel__button ssel__button--link" href="<?= $escape($downloadUrl) ?>"><?= $escape(Loc::getMessage('SS_ERRORLOGER_DOWNLOAD_SOURCE')) ?></a>
+      <?php endif; ?>
     </div>
     <form class="ssel__search" method="get">
       <input type="search" name="q" value="<?= $escape($query) ?>" placeholder="<?= $escape(Loc::getMessage('SS_ERRORLOGER_SEARCH_PLACEHOLDER')) ?>">
@@ -72,7 +77,7 @@ endif;
       <h3 style="margin:0 0 9px"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_HEADING')) ?></h3>
       <?php if ($createdUrl !== ''): ?>
         <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_CREATED')) ?></p>
-        <div class="ssel__share-row"><input class="ssel__share-url" readonly value="<?= $escape($createdUrl) ?>"></div>
+        <div class="ssel__share-row"><input class="ssel__share-url" readonly value="<?= $escape($createdUrl) ?>" title="<?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_COPY')) ?>"></div>
       <?php elseif (!empty($share['active'])): ?>
         <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_ACTIVE_UNTIL')) ?> <strong><?= date('d.m.Y H:i:s', (int)$share['expires_at']) ?></strong>. <?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_ACTIVE_ACTION')) ?></p>
       <?php else: ?>
@@ -131,4 +136,20 @@ endif;
     <?php endif; ?>
   <?php endif; ?>
 </main>
+<?php if (!$public): ?>
+<script>
+  document.querySelectorAll('.ssel__share-url').forEach(function (input) {
+    input.addEventListener('click', function () {
+      input.select();
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(input.value).catch(function () {
+          document.execCommand('copy');
+        });
+        return;
+      }
+      document.execCommand('copy');
+    });
+  });
+</script>
+<?php endif; ?>
 <?php if ($public): ?></body></html><?php endif; ?>

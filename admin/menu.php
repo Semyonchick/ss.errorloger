@@ -11,5 +11,7 @@ $aMenu = [
   'title' => Loc::getMessage('SS_ERRORLOGER_MENU_TITLE'),
   'url' => 'ss_logs.php?lang=' . LANGUAGE_ID,
   'more_url' => ['ss_logs.php'],
-  'items_id' => 'menu_ss_errorloger',
+  'items_id' => 'menu_smartsam_errorlogger',
 ];
+
+return $aMenu;
