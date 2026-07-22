@@ -2,15 +2,20 @@
 
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\EventManager;
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
+
+Loc::loadMessages(__FILE__);
 
 class ss_errorloger extends CModule
 {
   public $MODULE_ID = 'ss.errorloger';
   public $MODULE_VERSION;
   public $MODULE_VERSION_DATE;
-  public $MODULE_NAME = 'Анализ ошибок PHP';
-  public $MODULE_DESCRIPTION = 'Группирует журнал ошибок Bitrix и создаёт временные ссылки только для чтения.';
+  public $MODULE_NAME;
+  public $MODULE_DESCRIPTION;
+  public $PARTNER_NAME;
+  public $PARTNER_URI;
 
   public function __construct()
   {
@@ -18,6 +23,10 @@ class ss_errorloger extends CModule
     include __DIR__ . '/version.php';
     $this->MODULE_VERSION = $arModuleVersion['VERSION'];
     $this->MODULE_VERSION_DATE = $arModuleVersion['VERSION_DATE'];
+    $this->MODULE_NAME = Loc::getMessage('SS_ERRORLOGER_MODULE_NAME');
+    $this->MODULE_DESCRIPTION = Loc::getMessage('SS_ERRORLOGER_MODULE_DESCRIPTION');
+    $this->PARTNER_NAME = Loc::getMessage('SS_ERRORLOGER_PARTNER_NAME');
+    $this->PARTNER_URI = 'https://rere-design.ru';
   }
 
   public function DoInstall()
@@ -67,4 +76,3 @@ class ss_errorloger extends CModule
     return true;
   }
 }
-

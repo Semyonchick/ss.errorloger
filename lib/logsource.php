@@ -3,11 +3,13 @@
 namespace Ss\Errorloger;
 
 use Bitrix\Main\Config\Configuration;
+use Bitrix\Main\Localization\Loc;
 
 final class LogSource
 {
   public static function discover(): array
   {
+    Loc::loadMessages(__FILE__);
     $handling = Configuration::getValue('exception_handling');
     $file = self::findFile(is_array($handling) ? $handling : []);
     if ($file === '') {
@@ -15,7 +17,7 @@ final class LogSource
         'configured' => false,
         'path' => '',
         'readable' => false,
-        'message' => 'В настройках Bitrix не указан файл журнала ошибок.',
+        'message' => Loc::getMessage('SS_ERRORLOGER_SOURCE_NOT_CONFIGURED'),
       ];
     }
 
@@ -26,7 +28,7 @@ final class LogSource
       'readable' => is_file($path) && is_readable($path),
       'message' => is_file($path) && is_readable($path)
         ? ''
-        : 'Файл из настроек Bitrix ещё не создан или недоступен для чтения.',
+        : Loc::getMessage('SS_ERRORLOGER_SOURCE_NOT_READABLE'),
     ];
   }
 
@@ -74,4 +76,3 @@ PHP;
     return $root . '/' . ltrim($path, '/\\');
   }
 }
-

@@ -4,11 +4,13 @@ namespace Ss\Errorloger;
 
 use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
+use Bitrix\Main\Localization\Loc;
 
 final class ShareHandler
 {
   public static function handle(): void
   {
+    Loc::loadMessages(__FILE__);
     $request = Context::getCurrent()->getRequest();
     $path = parse_url($request->getRequestUri(), PHP_URL_PATH);
     if (!preg_match('~^/ss-errorloger/share/([a-f0-9]{64})/?$~', (string)$path, $match)) return;
@@ -21,8 +23,11 @@ final class ShareHandler
     header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'");
     if (!in_array($request->getRequestMethod(), ['GET', 'HEAD'], true) || !ShareLink::validate($match[1])) {
       http_response_code(404);
-      echo '<!doctype html><meta charset="utf-8"><title>Ссылка недоступна</title>';
-      echo '<p>Ссылка истекла, была отозвана или указана неверно.</p>';
+      echo '<!doctype html><meta charset="utf-8"><title>';
+      echo htmlspecialchars(Loc::getMessage('SS_ERRORLOGER_SHARE_UNAVAILABLE'), ENT_QUOTES, 'UTF-8');
+      echo '</title><p>';
+      echo htmlspecialchars(Loc::getMessage('SS_ERRORLOGER_SHARE_INVALID'), ENT_QUOTES, 'UTF-8');
+      echo '</p>';
       die();
     }
 
@@ -32,4 +37,3 @@ final class ShareHandler
     die();
   }
 }
-

@@ -1,4 +1,7 @@
 <?php
+use Bitrix\Main\Localization\Loc;
+
+Loc::loadMessages(__FILE__);
 $escape = static function ($value): string {
   return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 };
@@ -7,7 +10,7 @@ $formatDate = static function ($value) use ($escape): string {
   return $escape($timestamp ? date('d.m.Y H:i:s', $timestamp) : $value);
 };
 if ($public):
-?><!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ошибки PHP</title></head><body><?php
+?><!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title><?= $escape(Loc::getMessage('SS_ERRORLOGER_TITLE')) ?></title></head><body><?php
 endif;
 ?>
 <style>
@@ -54,51 +57,51 @@ endif;
 <main class="ssel">
   <div class="ssel__top">
     <div>
-      <h2 style="margin:0 0 5px">Журнал ошибок PHP</h2>
-      <div class="ssel__source">Источник: <?= $source['path'] !== '' ? $escape($source['path']) : 'не настроен' ?></div>
-      <div class="ssel__source">Группировка: тип + сообщение + файл + строка.</div>
+      <h2 style="margin:0 0 5px"><?= $escape(Loc::getMessage('SS_ERRORLOGER_HEADING')) ?></h2>
+      <div class="ssel__source"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SOURCE')) ?>: <?= $source['path'] !== '' ? $escape($source['path']) : $escape(Loc::getMessage('SS_ERRORLOGER_NOT_CONFIGURED')) ?></div>
+      <div class="ssel__source"><?= $escape(Loc::getMessage('SS_ERRORLOGER_GROUPING')) ?></div>
     </div>
     <form class="ssel__search" method="get">
-      <input type="search" name="q" value="<?= $escape($query) ?>" placeholder="Ошибка, файл, хост…">
-      <button class="ssel__button" type="submit">Найти</button>
+      <input type="search" name="q" value="<?= $escape($query) ?>" placeholder="<?= $escape(Loc::getMessage('SS_ERRORLOGER_SEARCH_PLACEHOLDER')) ?>">
+      <button class="ssel__button" type="submit"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SEARCH')) ?></button>
     </form>
   </div>
 
   <?php if (!$public): ?>
     <section class="ssel__share">
-      <h3 style="margin:0 0 9px">Временный доступ без авторизации</h3>
+      <h3 style="margin:0 0 9px"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_HEADING')) ?></h3>
       <?php if ($createdUrl !== ''): ?>
-        <p>Ссылка создана на 72 часа. После обновления страницы секретная часть больше не показывается.</p>
+        <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_CREATED')) ?></p>
         <div class="ssel__share-row"><input class="ssel__share-url" readonly value="<?= $escape($createdUrl) ?>"></div>
       <?php elseif (!empty($share['active'])): ?>
-        <p>Ссылка активна до <strong><?= date('d.m.Y H:i:s', (int)$share['expires_at']) ?></strong>. Можно отозвать её или выпустить новую.</p>
+        <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_ACTIVE_UNTIL')) ?> <strong><?= date('d.m.Y H:i:s', (int)$share['expires_at']) ?></strong>. <?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_ACTIVE_ACTION')) ?></p>
       <?php else: ?>
-        <p>Ссылка открывает только эту страницу журнала, действует 72 часа и закрыта от индексации.</p>
+        <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_DESCRIPTION')) ?></p>
       <?php endif; ?>
       <div class="ssel__share-row">
-        <form method="post"><?= bitrix_sessid_post() ?><input type="hidden" name="share_action" value="create"><button class="ssel__button" type="submit"><?= !empty($share['active']) ? 'Выпустить новую' : 'Создать ссылку на 72 часа' ?></button></form>
-        <?php if (!empty($share['active'])): ?><form method="post"><?= bitrix_sessid_post() ?><input type="hidden" name="share_action" value="revoke"><button class="ssel__button ssel__button--muted" type="submit">Отозвать</button></form><?php endif; ?>
+        <form method="post"><?= bitrix_sessid_post() ?><input type="hidden" name="share_action" value="create"><button class="ssel__button" type="submit"><?= $escape(Loc::getMessage(!empty($share['active']) ? 'SS_ERRORLOGER_SHARE_REISSUE' : 'SS_ERRORLOGER_SHARE_CREATE')) ?></button></form>
+        <?php if (!empty($share['active'])): ?><form method="post"><?= bitrix_sessid_post() ?><input type="hidden" name="share_action" value="revoke"><button class="ssel__button ssel__button--muted" type="submit"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_REVOKE')) ?></button></form><?php endif; ?>
       </div>
     </section>
   <?php endif; ?>
 
   <?php if (!$source['configured']): ?>
     <section class="ssel__setup">
-      <h3 style="margin-top:0">Bitrix не настроен на запись ошибок в файл</h3>
-      <p>Добавьте секцию ниже в массив <code>return</code> файла <code>/bitrix/.settings_extra.php</code>. Если секция <code>exception_handling</code> уже существует, объедините настройки, не создавая второй ключ.</p>
+      <h3 style="margin-top:0"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SETUP_HEADING')) ?></h3>
+      <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SETUP_BEFORE')) ?> <code>return</code> <?= $escape(Loc::getMessage('SS_ERRORLOGER_SETUP_FILE')) ?> <code>/bitrix/.settings_extra.php</code>. <?= $escape(Loc::getMessage('SS_ERRORLOGER_SETUP_MERGE')) ?> <code>exception_handling</code>.</p>
       <pre><?= $escape($configurationExample) ?></pre>
-      <p>Создайте каталог <code>/local/logs</code> с правом записи для PHP. Перезагрузите страницу после появления первой записи.</p>
+      <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SETUP_DIRECTORY')) ?> <code>/local/logs</code> <?= $escape(Loc::getMessage('SS_ERRORLOGER_SETUP_DIRECTORY_AFTER')) ?></p>
     </section>
   <?php else: ?>
     <div class="ssel__stats">
-      <div class="ssel__stat"><strong><?= (int)$stats['events'] ?></strong><span>событий прочитано</span></div>
-      <div class="ssel__stat"><strong><?= (int)$stats['groups'] ?></strong><span>уникальных ошибок</span></div>
-      <div class="ssel__stat"><strong><?= (int)$stats['repeated'] ?></strong><span>повторяющихся групп</span></div>
+      <div class="ssel__stat"><strong><?= (int)$stats['events'] ?></strong><span><?= $escape(Loc::getMessage('SS_ERRORLOGER_STATS_EVENTS')) ?></span></div>
+      <div class="ssel__stat"><strong><?= (int)$stats['groups'] ?></strong><span><?= $escape(Loc::getMessage('SS_ERRORLOGER_STATS_GROUPS')) ?></span></div>
+      <div class="ssel__stat"><strong><?= (int)$stats['repeated'] ?></strong><span><?= $escape(Loc::getMessage('SS_ERRORLOGER_STATS_REPEATED')) ?></span></div>
     </div>
     <?php if (!$source['readable']): ?>
       <div class="ssel__empty"><?= $escape($source['message']) ?><br><code><?= $escape($source['path']) ?></code></div>
     <?php elseif (!$groups): ?>
-      <div class="ssel__empty">Подходящих записей не найдено.</div>
+      <div class="ssel__empty"><?= $escape(Loc::getMessage('SS_ERRORLOGER_EMPTY')) ?></div>
     <?php else: ?>
       <div class="ssel__list">
         <?php foreach ($groups as $group): $entry = $group['entry']; ?>
@@ -112,16 +115,16 @@ endif;
                 </div>
                 <h3 class="ssel__title"><?= $escape($entry['message']) ?></h3>
                 <div class="ssel__meta">
-                  <span>Впервые<strong><?= $formatDate($group['first_at']) ?></strong></span>
-                  <span>Последний раз<strong><?= $formatDate($group['last_at']) ?></strong></span>
-                  <span>Хосты<strong><?= $escape(implode(', ', array_keys($group['hosts'])) ?: '—') ?></strong></span>
+                  <span><?= $escape(Loc::getMessage('SS_ERRORLOGER_FIRST_SEEN')) ?><strong><?= $formatDate($group['first_at']) ?></strong></span>
+                  <span><?= $escape(Loc::getMessage('SS_ERRORLOGER_LAST_SEEN')) ?><strong><?= $formatDate($group['last_at']) ?></strong></span>
+                  <span><?= $escape(Loc::getMessage('SS_ERRORLOGER_HOSTS')) ?><strong><?= $escape(implode(', ', array_keys($group['hosts'])) ?: '—') ?></strong></span>
                 </div>
               </div>
-              <div class="ssel__count"><strong><?= (int)$group['count'] ?></strong><span>повторений</span></div>
+              <div class="ssel__count"><strong><?= (int)$group['count'] ?></strong><span><?= $escape(Loc::getMessage('SS_ERRORLOGER_REPEATS')) ?></span></div>
             </div>
             <?php if ($entry['file'] !== ''): ?><div class="ssel__location"><?= $escape($entry['file']) ?><?= $entry['line'] !== '' ? ':' . (int)$entry['line'] : '' ?></div><?php endif; ?>
-            <?php if ($entry['trace'] !== ''): ?><details><summary>Стек вызовов и детали</summary><pre class="ssel__trace"><?= $escape($entry['trace']) ?></pre></details><?php endif; ?>
-            <?php if (count($group['occurrences']) > 1): ?><details><summary>Последние срабатывания (<?= count($group['occurrences']) ?>)</summary><pre class="ssel__trace"><?= $escape(implode("\n", $group['occurrences'])) ?></pre></details><?php endif; ?>
+            <?php if ($entry['trace'] !== ''): ?><details><summary><?= $escape(Loc::getMessage('SS_ERRORLOGER_TRACE')) ?></summary><pre class="ssel__trace"><?= $escape($entry['trace']) ?></pre></details><?php endif; ?>
+            <?php if (count($group['occurrences']) > 1): ?><details><summary><?= $escape(Loc::getMessage('SS_ERRORLOGER_OCCURRENCES')) ?> (<?= count($group['occurrences']) ?>)</summary><pre class="ssel__trace"><?= $escape(implode("\n", $group['occurrences'])) ?></pre></details><?php endif; ?>
           </article>
         <?php endforeach; ?>
       </div>
@@ -129,4 +132,3 @@ endif;
   <?php endif; ?>
 </main>
 <?php if ($public): ?></body></html><?php endif; ?>
-

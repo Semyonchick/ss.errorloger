@@ -2,20 +2,24 @@
 
 use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
+use Bitrix\Main\Localization\Loc;
 use Ss\Errorloger\LogsPage;
 use Ss\Errorloger\ShareLink;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_admin_before.php';
+Loc::loadMessages(__FILE__);
 
 if (!Loader::includeModule('ss.errorloger')) {
   require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_admin_after.php';
-  echo '<div class="adm-info-message">Установите модуль «Анализ ошибок PHP».</div>';
+  echo '<div class="adm-info-message">' . htmlspecialcharsbx(Loc::getMessage('SS_ERRORLOGER_INSTALL_REQUIRED')) . '</div>';
   require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/epilog_admin.php';
   return;
 }
 
 global $APPLICATION, $USER;
-if (!is_object($USER) || !$USER->IsAdmin()) $APPLICATION->AuthForm('Недостаточно прав.');
+if (!is_object($USER) || !$USER->IsAdmin()) {
+  $APPLICATION->AuthForm(Loc::getMessage('SS_ERRORLOGER_ACCESS_DENIED'));
+}
 
 $request = Context::getCurrent()->getRequest();
 if ($request->isPost() && check_bitrix_sessid()) {
@@ -38,11 +42,10 @@ $query = trim((string)$request->getQuery('q'));
 $share = ShareLink::status();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_admin_after.php';
-$APPLICATION->SetTitle('Ошибки PHP');
+$APPLICATION->SetTitle(Loc::getMessage('SS_ERRORLOGER_PAGE_TITLE'));
 LogsPage::render(LogsPage::payload($query), [
   'public' => false,
   'share' => $share,
   'createdUrl' => $createdUrl,
 ]);
 require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/epilog_admin.php';
-

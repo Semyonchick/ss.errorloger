@@ -1,0 +1,44 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.4', '8.1', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - name: Validate Composer metadata
+        run: composer validate --strict --no-check-publish
+      - name: Lint PHP files
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem -Recurse -Filter *.php | ForEach-Object {
+            php -l $_.FullName
+            if ($LASTEXITCODE -ne 0) { $failed = $true }
+          }
+          if ($failed) { exit 1 }
+
+  marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Marketplace archive
+        shell: pwsh
+        run: ./tools/build-marketplace.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ss.errorloger-marketplace
+          path: dist/.last_version.zip
+

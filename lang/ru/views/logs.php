@@ -1,0 +1,34 @@
+<?php
+
+$MESS['SS_ERRORLOGER_TITLE'] = 'Ошибки PHP';
+$MESS['SS_ERRORLOGER_HEADING'] = 'Журнал ошибок PHP';
+$MESS['SS_ERRORLOGER_SOURCE'] = 'Источник';
+$MESS['SS_ERRORLOGER_NOT_CONFIGURED'] = 'не настроен';
+$MESS['SS_ERRORLOGER_GROUPING'] = 'Группировка: тип + сообщение + файл + строка.';
+$MESS['SS_ERRORLOGER_SEARCH_PLACEHOLDER'] = 'Ошибка, файл, хост…';
+$MESS['SS_ERRORLOGER_SEARCH'] = 'Найти';
+$MESS['SS_ERRORLOGER_SHARE_HEADING'] = 'Временный доступ без авторизации';
+$MESS['SS_ERRORLOGER_SHARE_CREATED'] = 'Ссылка создана на 72 часа. После обновления страницы секретная часть больше не показывается.';
+$MESS['SS_ERRORLOGER_SHARE_ACTIVE_UNTIL'] = 'Ссылка активна до';
+$MESS['SS_ERRORLOGER_SHARE_ACTIVE_ACTION'] = 'Можно отозвать её или выпустить новую.';
+$MESS['SS_ERRORLOGER_SHARE_DESCRIPTION'] = 'Ссылка открывает только эту страницу журнала, действует 72 часа и закрыта от индексации.';
+$MESS['SS_ERRORLOGER_SHARE_REISSUE'] = 'Выпустить новую';
+$MESS['SS_ERRORLOGER_SHARE_CREATE'] = 'Создать ссылку на 72 часа';
+$MESS['SS_ERRORLOGER_SHARE_REVOKE'] = 'Отозвать';
+$MESS['SS_ERRORLOGER_SETUP_HEADING'] = 'Bitrix не настроен на запись ошибок в файл';
+$MESS['SS_ERRORLOGER_SETUP_BEFORE'] = 'Добавьте секцию ниже в массив';
+$MESS['SS_ERRORLOGER_SETUP_FILE'] = 'файла';
+$MESS['SS_ERRORLOGER_SETUP_MERGE'] = 'Если секция уже существует, объедините настройки, не создавая второй ключ';
+$MESS['SS_ERRORLOGER_SETUP_DIRECTORY'] = 'Создайте каталог';
+$MESS['SS_ERRORLOGER_SETUP_DIRECTORY_AFTER'] = 'с правом записи для PHP. Перезагрузите страницу после появления первой записи.';
+$MESS['SS_ERRORLOGER_STATS_EVENTS'] = 'событий прочитано';
+$MESS['SS_ERRORLOGER_STATS_GROUPS'] = 'уникальных ошибок';
+$MESS['SS_ERRORLOGER_STATS_REPEATED'] = 'повторяющихся групп';
+$MESS['SS_ERRORLOGER_EMPTY'] = 'Подходящих записей не найдено.';
+$MESS['SS_ERRORLOGER_FIRST_SEEN'] = 'Впервые';
+$MESS['SS_ERRORLOGER_LAST_SEEN'] = 'Последний раз';
+$MESS['SS_ERRORLOGER_HOSTS'] = 'Хосты';
+$MESS['SS_ERRORLOGER_REPEATS'] = 'повторений';
+$MESS['SS_ERRORLOGER_TRACE'] = 'Стек вызовов и детали';
+$MESS['SS_ERRORLOGER_OCCURRENCES'] = 'Последние срабатывания';
+

@@ -2,7 +2,7 @@
   "name": "semyonchick/ss.errorloger",
   "description": "Bitrix module for grouped PHP error log analysis and temporary read-only sharing",
   "type": "bitrix-d7-module",
-  "license": "proprietary",
+  "license": "MIT",
   "require": {
     "php": ">=7.4",
     "composer/installers": "^2.3"
@@ -11,4 +11,3 @@
     "installer-name": "ss.errorloger"
   }
 }
-
