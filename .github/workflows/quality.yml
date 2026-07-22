@@ -37,7 +37,7 @@ jobs:
       - name: Build Marketplace archive
         shell: pwsh
         run: ./tools/build-marketplace.ps1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ss.errorloger-marketplace
           path: dist/.last_version.zip
