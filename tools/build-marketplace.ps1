@@ -5,7 +5,7 @@ $distRoot = Join-Path $projectRoot 'dist'
 $packageRoot = Join-Path $distRoot '.last_version'
 $archivePath = Join-Path $distRoot '.last_version.zip'
 
-if ($projectRoot -notlike '*\ss.errorloger') {
+if ([IO.Path]::GetFileName($projectRoot) -ne 'ss.errorloger') {
   throw "Unexpected project root: $projectRoot"
 }
 
@@ -33,7 +33,7 @@ try {
   )
   try {
     Get-ChildItem -LiteralPath $packageRoot -Recurse -File | ForEach-Object {
-      $relativePath = $_.FullName.Substring($packageRoot.Length).TrimStart('\')
+      $relativePath = $_.FullName.Substring($packageRoot.Length).TrimStart([char[]]@('\', '/'))
       $entryName = '.last_version/' + $relativePath.Replace('\', '/')
       $entry = $archive.CreateEntry($entryName, [IO.Compression.CompressionLevel]::Optimal)
       $entryStream = $entry.Open()
