@@ -27,13 +27,16 @@ endif;
   .ssel__stat { padding: 15px 17px; border: 1px solid #dce3e7; border-radius: 8px; background: #fff; }
   .ssel__stat strong { display: block; font-size: 25px; line-height: 1.1; }
   .ssel__stat span { color: #71808a; }
-  .ssel__share, .ssel__setup, .ssel__empty { margin: 0 0 18px; padding: 18px; border-radius: 8px; background: #fff; border: 1px solid #dce3e7; }
+  .ssel__share, .ssel__setup, .ssel__security, .ssel__empty { margin: 0 0 18px; padding: 18px; border-radius: 8px; background: #fff; border: 1px solid #dce3e7; }
   .ssel__share { border-left: 4px solid #2f7dd1; }
   .ssel__share-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
   .ssel__share-row + .ssel__share-row { margin-top: 12px; }
   .ssel__share-url { flex: 1 1 520px; padding: 9px 11px; border: 1px solid #9ac3ec; border-radius: 4px; cursor: copy; }
   .ssel__setup { border-left: 4px solid #e29b28; }
-  .ssel__setup pre { overflow: auto; padding: 14px; background: #18232b; color: #eaf2f5; border-radius: 6px; }
+  .ssel__security { border-left: 4px solid #b73527; }
+  .ssel__setup pre, .ssel__security pre { overflow: auto; padding: 14px; background: #18232b; color: #eaf2f5; border-radius: 6px; }
+  .ssel__security-grid { display: grid; grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 14px; }
+  .ssel__security-grid h4 { margin: 0 0 7px; }
   .ssel__list { display: grid; gap: 12px; }
   .ssel__card { overflow: hidden; border: 1px solid #dce3e7; border-radius: 9px; background: #fff; }
   .ssel__card-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 16px 18px; }
@@ -50,7 +53,7 @@ endif;
   .ssel summary { padding: 11px 18px; cursor: pointer; color: #2f6fae; }
   .ssel__trace { overflow: auto; margin: 0; padding: 15px 18px; background: #18232b; color: #eaf2f5; white-space: pre-wrap; word-break: break-word; }
   @media (max-width: 760px) {
-    .ssel__stats, .ssel__meta { grid-template-columns: 1fr; }
+    .ssel__stats, .ssel__meta, .ssel__security-grid { grid-template-columns: 1fr; }
     .ssel__card-head { grid-template-columns: 1fr; }
     .ssel__count { text-align: left; }
     .ssel__search, .ssel__search input { width: 100%; min-width: 0; }
@@ -87,6 +90,26 @@ endif;
         <form method="post"><?= bitrix_sessid_post() ?><input type="hidden" name="share_action" value="create"><button class="ssel__button" type="submit"><?= $escape(Loc::getMessage(!empty($share['active']) ? 'SS_ERRORLOGER_SHARE_REISSUE' : 'SS_ERRORLOGER_SHARE_CREATE')) ?></button></form>
         <?php if (!empty($share['active'])): ?><form method="post"><?= bitrix_sessid_post() ?><input type="hidden" name="share_action" value="revoke"><button class="ssel__button ssel__button--muted" type="submit"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SHARE_REVOKE')) ?></button></form><?php endif; ?>
       </div>
+    </section>
+
+    <section class="ssel__security">
+      <h3 style="margin-top:0"><?= $escape(Loc::getMessage('SS_ERRORLOGER_SECURITY_HEADING')) ?></h3>
+      <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SECURITY_OUTSIDE_ROOT')) ?></p>
+      <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SECURITY_WEB_DENY')) ?></p>
+      <div class="ssel__security-grid">
+        <div>
+          <h4>Apache 2.4 (.htaccess)</h4>
+          <pre>Require all denied</pre>
+        </div>
+        <div>
+          <h4>nginx</h4>
+          <pre>location ^~ /local/logs/ {
+    deny all;
+}</pre>
+        </div>
+      </div>
+      <p><?= $escape(Loc::getMessage('SS_ERRORLOGER_SECURITY_PERMISSIONS')) ?></p>
+      <p><strong><?= $escape(Loc::getMessage('SS_ERRORLOGER_SECURITY_CHECK')) ?></strong></p>
     </section>
   <?php endif; ?>
 
